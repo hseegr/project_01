@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container weather-search-form">
+  <p class="weather-movie-list"><strong class="weather-movie-list-name">{{ user.nickname }}</strong>님의 선호도를 기반으로, 오늘 날씨에 어울리는 영화를 추천해 드릴게요! 🥰</p>
+  <!-- form action 수정 -->
+  <form method="GET">
+    <input type="text" name="searched_movies" value="{{ searched_movies }}" placeholder="원하는 영화를 검색해요!">
+    <button>검색</button>
+  </form>
+</div>
+
+<div class="movie-list-container container">
+  {% if weather_condition %}
+  <p><strong>{{ city }}</strong>의 <strong>{{ korean_weather_description }}</strong> 날씨와 어울리는 영화는?</p>
+    <p><strong>오늘의 온도</strong> : {{ temperature }}°C</p>
+
+    {% if user.favorite_genres.all %}
+      <p><strong>선호 장르</strong> :
+        {% for genre in user.favorite_genres.all %}
+          {{ genre.name }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      </p>
+    {% endif %}
+
+    <button id="toggleRecommendedButton" class="custom-weather-button">추천 영화 보기</button>
+
+    {% if movies %}
+      <div class="movies-container">
+        {% for movie in movies %}
+          <div class="movie" data-temperature="{{ movie.recommended_temperature|safe }}">
+            <div class="poster-with-heart">
+              <img class="heart-icon"
+                   src="{% static 'img/heart-none.png' %}"
+                   alt="icon"
+                   data-movie-id="{{ movie.id }}"
+                   {% if movie.id in liked_movie_ids %}
+                   data-is-liked="true"
+                   {% endif %}>
+              <div class="poster-overlay"></div>
+              <a href="{% url 'movies:movie_detail' movie.id %}">
+                <img class="movie-poster" src="https://image.tmdb.org/t/p/w300{{ movie.poster_path }}" alt="{{ movie.title }}">
+              </a>
+            </div>
+            <p class="movie-title">{{ movie.title }}</p>
+            <p class="weather-movie-genres">
+              {% for genre in movie.genres.all %}
+                {{ genre.name }}{% if not forloop.last %}, {% endif %}
+              {% endfor %}
+            </p>
+            {% if movie.is_recommended_for_current_temp %}
+              <p class="recommended-badge" style="color:#f439b5; display: none;"><strong>현재 온도에 추천!</strong></p>
+            {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>죄송합니다. 현재 날씨와 선호하시는 장르에 맞는 영화를 찾을 수 없습니다.</p>
+    {% endif %}
+  {% else %}
+    <p>{{ error }}</p>
+  {% endif %}
+</div>
+
+<style>
+  /* 하트 아이콘 애니메이션 */
+  .heart-icon {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .heart-icon.bounce {
+    animation: bounce 0.5s ease-in-out;
+  }
+  
+  @keyframes bounce {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.2); }
+    50% { transform: scale(1); }
+    70% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+  
+  /* 미니 하트 애니메이션 */
+  .mini-heart {
+    position: absolute;
+    width: 12px;  /* 크기 조정 */
+    height: 12px;  /* 크기 조정 */
+    animation: float-up 1.5s ease-in-out forwards; /* 지속시간 1.5초 */
+    opacity: 0.8;
+  }
+  
+  @keyframes float-up {
+    0% { 
+      transform: translate(0, 0) scale(1); 
+      opacity: 1; 
+    }
+    80% { 
+      opacity: 0.8; 
+    }
+    100% { 
+      transform: translate(calc(var(--x) * 50px), calc(var(--y) * 100px)) scale(0.8); /* 미니 하트의 크기 변화 */
+      opacity: 0; 
+    }
+  }
+</style>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  const heartIcons = document.querySelectorAll('.heart-icon');
+  const movieContainer = document.querySelector('.movies-container');
+  const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  const allMovies = Array.from(movieContainer.children);
+
+  function createMiniHeart() {
+    const miniHeart = document.createElement('img');
+    miniHeart.classList.add('mini-heart');
+    miniHeart.src = "{% static 'img/heart-fill.png' %}";
+    
+    const randomX = (Math.random() - 0.5) * 2;
+    const randomY = -(Math.random() * 0.5 + 0.5);
+    
+    miniHeart.style.setProperty('--x', randomX.toString());
+    miniHeart.style.setProperty('--y', randomY.toString());
+    miniHeart.style.width = '16px';
+    miniHeart.style.height = '16px';
+    miniHeart.style.opacity = (Math.random() * 0.5 + 0.5).toString();
+    
+    return miniHeart;
+  }
+
+  // 애니메이션 함수
+  function animateMovies(movies) {
+    movies.forEach(movie => {
+      movie.style.opacity = '0';
+      movie.style.transform = 'translateY(30px)';
+      movie.style.display = 'block';
+    });
+
+    setTimeout(() => {
+      movies.forEach((movie, index) => {
+        movie.style.transition = 'opacity 0.6s, transform 0.6s';
+        movie.style.transitionDelay = `${index * 0.15}s`;
+        movie.style.opacity = '0.9';
+        movie.style.transform = 'translateY(0)';
+      });
+    },20);
+  }
+
+  // 초기 로드 시 모든 영화에 애니메이션 적용
+  animateMovies(allMovies);
+
+  // localStorage에서 좋아요 상태 불러오기
+  function getLikedMovies() {
+    return JSON.parse(localStorage.getItem('likedMovies')) || {};
+  }
+  
+  // localStorage에 좋아요 상태 저장하기
+  function saveLikedMovies(likedMovies) {
+    localStorage.setItem('likedMovies', JSON.stringify(likedMovies));
+  }
+  
+  // 초기 상태 설정
+  function initializeHeartIcons() {
+    const likedMovies = getLikedMovies();
+    heartIcons.forEach(icon => {
+      const movieId = icon.dataset.movieId;
+      if (likedMovies[movieId]) {
+        icon.src = "{% static 'img/heart-fill.png' %}";
+        icon.dataset.isLiked = "true";
+      } else {
+        icon.src = "{% static 'img/heart-none.png' %}";
+        icon.dataset.isLiked = "false";
+      }
+    });
+  }
+  
+  // 초기화 실행
+  initializeHeartIcons();
+  
+  // 클릭 이벤트 처리 -> 좋아요, 좋아요 해제
+  movieContainer.addEventListener('click', function (event) {
+    if (!event.target.classList.contains('heart-icon')) return;
+
+    event.preventDefault();
+
+    // 비로그인 상태에서 하트 클릭 시, 알럿 + 로그인 페이지로 이동
+    if (!isUserLoggedIn) {
+      alert('로그인이 필요한 페이지입니다. 로그인 페이지로 이동합니다.')
+      window.location.href = "{% url 'accounts:login' %}"
+      return
+    }
+
+    const movieId = event.target.dataset.movieId;
+
+    // 통통 튀는 애니메이션 추가
+    event.target.classList.add('bounce');
+
+    // 애니메이션이 끝난 후 클래스 제거
+    event.target.addEventListener('animationend', function() {
+      event.target.classList.remove('bounce');
+    });
+
+    
+
+
+    axios({
+      method: 'post',
+      url: `/movies/${movieId}/likes/`,
+      headers: { 'X-CSRFToken': csrftoken },
+    })
+      .then((response) => {
+        const isLiked = response.data.is_liked;
+        event.target.src = isLiked
+          ? "{% static 'img/heart-fill.png' %}"
+          : "{% static 'img/heart-none.png' %}";
+        event.target.dataset.isLiked = isLiked.toString();
+
+        // localStorage 업데이트
+        const likedMovies = getLikedMovies();
+        if (isLiked) {
+          likedMovies[movieId] = true;
+        } else {
+          delete likedMovies[movieId];
+        }
+        saveLikedMovies(likedMovies);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  });
+
+   const toggleRecommendedButton = document.getElementById('toggleRecommendedButton');
+   let isRecommendedVisible = false;
+
+   toggleRecommendedButton.addEventListener('click', function() {
+     isRecommendedVisible = !isRecommendedVisible;
+
+     // Hide all movies immediately
+     allMovies.forEach(movie => {
+       movie.style.display = 'none';
+     });
+
+     // Delay for a second before showing movies again
+     setTimeout(() => {
+       const visibleMovies = [];
+
+       allMovies.forEach(movie => {
+         const badge = movie.querySelector('.recommended-badge');
+         if (isRecommendedVisible) {
+           if (badge) {
+             visibleMovies.push(movie);
+             movie.style.display = 'block'; // Show recommended movies
+           }
+         } else {
+           visibleMovies.push(movie);
+           movie.style.display = 'block'; // Show all movies
+         }
+
+         if (badge) {
+           badge.style.display = isRecommendedVisible ? 'block' : 'none';
+         }
+       });
+
+       // Apply animation to the visible movies after the delay
+       animateMovies(visibleMovies);
+     }, 1000); // Delay of one second
+
+     this.textContent = isRecommendedVisible ? '모든 영화 보기' : '추천 영화 보기';
+   });
+});
+</script>
+
+{% endblock %}

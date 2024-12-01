@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!--모달!-->
+<div class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">WARM</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>로그인이 필요한 페이지예요.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="{% url 'accounts:login' %}">
+        <button class="modal-btn" type="button" class="btn btn-primary">로그인</button>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container movie-list-container">
+
+  <!-- 회원탈퇴 메시지 표시 -->
+  {% if messages %}
+    <div id="success-message" class="alert alert-success">
+      {% for message in messages %}
+        <p>{{ message }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!--<div class="movie-main-img">
+    <p></p>
+  </div>>-->
+  
+  <div>
+    <a href="{% url "movies:weather_input" %}">
+      <div class="main-image-container">
+        <img class="movie-main-img main-default" src="{% static 'img/main.jpg' %}" alt="main-img">
+        <img class="movie-main-img main-1140" src="{% static 'img/main-1140.jpg' %}" alt="main-img">
+        <img class="movie-main-img main-960" src="{% static 'img/main-960.jpg' %}" alt="main-img">
+        <img class="movie-main-img main-720" src="{% static 'img/main-720.jpg' %}" alt="main-img">
+      </div>
+    </a>
+  </div>
+
+  <!-- 영화 목록 -->
+  <div>
+    <p class="movie-main-title">오늘의 랜덤 영화! 😝</p>
+    <div id="random-movies" class="movies-container">
+      {% for movie in random_movies %}
+      <div class="movie" data-genre-ids="{% for genre in movie.genres.all %}{{ genre.id }}{% if not forloop.last %},{% endif %}{% endfor %}">
+        <div class="poster-with-heart">
+          <img class="heart-icon"
+          src="{% static 'img/heart-none.png' %}"
+          alt="icon"
+          data-movie-id="{{ movie.id }}"
+          {% if movie.id in liked_movie_ids %}
+          data-is-liked="true"
+          {% endif %}>
+          <div class="poster-overlay"></div>
+          <a href="{% url 'movies:movie_detail' movie.id %}">
+            <img class="movie-poster" src="https://image.tmdb.org/t/p/w300{{ movie.poster_path }}" alt="{{ movie.title }}">
+          </a>
+        </div>
+        <h4 class="movie-title">{{ movie.title }}</h4>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- 장르별 인기 영화 섹션 -->
+  <div class="record"></div>
+
+  <div>
+    <a class="movie-main-title-genre" href="{% url 'movies:movie_list' %}">
+      <p class="movie-main-title">장르별 인기 영화 🎈 &gt;</p>
+    </a>
+    <p class="movie-main-title-1">장르별 인기 영화들을 만나보세요!</p>
+    {% for genre_name, movies in genre_movies.items %}
+    <div class="genre-section">
+      <p class="movie-main-title">{{ genre_name }} <span>TOP</span> ✨</p>
+      <div class="movies-container">
+        {% for movie in movies %}
+        <div class="movie" data-genre-ids="{% for genre in movie.genres.all %}{{ genre.id }}{% if not forloop.last %},{% endif %}{% endfor %}">
+          <div class="poster-with-heart">
+            <img class="heart-icon"
+            src="{% static 'img/heart-none.png' %}"
+            alt="icon"
+            data-movie-id="{{ movie.id }}"
+            {% if movie.id in liked_movie_ids %}
+            data-is-liked="true"
+            {% endif %}>
+            <div class="poster-overlay"></div>
+            <a href="{% url 'movies:movie_detail' movie.id %}">
+              <img class="movie-poster" src="https://image.tmdb.org/t/p/w300{{ movie.poster_path }}" alt="{{ movie.title }}">
+            </a>
+          </div>
+          <h4 class="movie-title">{{ movie.title }}</h4>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // 회원탈퇴 메시지 자동 숨기기
+    const successMessage = document.getElementById('success-message');
+    if (successMessage) {
+      setTimeout(function() {
+        successMessage.style.display = 'none';  // 3초 후 메시지 숨기기
+      }, 3000);
+    }
+
+    // 하트 버튼 찜하기 기능
+    const heartIcons = document.querySelectorAll('.heart-icon');
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    heartIcons.forEach(icon => {
+      if (icon.dataset.isLiked === "true") {
+        icon.src = "{% static 'img/heart-fill.png' %}";
+      }
+    });
+
+    const movieContainer = document.querySelector('.movie-list-container');
+    movieContainer.addEventListener('click', function(event) {
+      if (!event.target.classList.contains('heart-icon')) return;
+
+      event.preventDefault();
+
+      // 모달 동작 코드
+      const myModal = new bootstrap.Modal(document.querySelector('.modal'));
+      const myInput = document.querySelector('input');
+
+      if (!isUserLoggedIn) {
+        myModal.show()
+        myModal.addEventListener('shown.bs.modal', () => {
+          myInput.focus()
+        })
+      }
+      const movieId = event.target.dataset.movieId;
+      
+      event.target.classList.add('bounce');
+
+      // 애니메이션이 끝난 후 클래스 제거
+      event.target.addEventListener('animationend', function() {
+        event.target.classList.remove('bounce');
+      });
+
+
+      axios({
+        method: 'post',
+        url: `/movies/${movieId}/likes/`,
+        headers: { 'X-CSRFToken': csrftoken },
+      })
+        .then((response) => {
+          const isLiked = response.data.is_liked;
+          event.target.src = isLiked
+            ? "{% static 'img/heart-fill.png' %}"
+            : "{% static 'img/heart-none.png' %}";
+          event.target.dataset.isLiked = isLiked.toString();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    });
+  });
+
+  // 이미지 배너 크기 변경
+  {% comment %} function updateMainImage() {
+    const mainImg = document.querySelector('.movie-main-img');
+    const screenWidth = window.innerWidth;
+  
+    if (screenWidth > 1140) {
+      mainImg.src = "{% static 'img/main.jpg' %}";
+    } else if (screenWidth > 960) {
+      mainImg.src = "{% static 'img/main-1140.jpg' %}";
+    } else if (screenWidth > 720) {
+      mainImg.src = "{% static 'img/main-960.jpg' %}";
+    } else {
+      mainImg.src = "{% static 'img/main-720.jpg' %}";
+    }
+  }
+  
+  window.addEventListener('resize', updateMainImage);
+  window.addEventListener('load', updateMainImage); {% endcomment %}
+  
+</script>
+
+{% endblock content %}

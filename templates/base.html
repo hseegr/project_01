@@ -1,0 +1,200 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link id="theme-link" rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link id="accounts-theme-link" rel="stylesheet" href="{% static 'css/accounts.css' %}">
+    <link id="movies-theme-link" rel="stylesheet" href="{% static 'css/movies.css' %}">
+    <link id="articles-theme-link" rel="stylesheet" href="{% static 'css/articles.css' %}">
+    <title>WARM</title>
+</head>
+<body>
+  {% csrf_token %}
+  <nav>
+    <div class="container">
+      <header class="base-main-text">
+          <a href="{% url "movies:index" %}">WARM</a>
+          <button class="menu-toggle">
+            <img src="{% static "img/menu.png" %}" alt="menu">
+          </button>
+      </header>
+
+      <div class='base-nav-menu'>
+        <a href="{% url "movies:weather_input" %}">오늘 날씨, 오늘 영화 🌞</a>
+        <a href="{% url "movies:movie_list" %}">장르별 영화</a>
+        <a href="{% url "movies:movie_record" %}">나의 기록</a>
+        <a href="{% url "articles:main_page" %}">커뮤니티</a>
+      </div>
+
+      {% if request.user.is_authenticated %}
+      <div class="nav-main-user-info">
+        <a href="{% url "accounts:mypage" %}">
+          <p class="nav-base-name">반가워요! <span>{{ user.nickname }}</span>님, 영화 보기 좋은 날이에요! 😊</p>
+        </a>
+        <a href="{% url "accounts:mypage" %}">
+          <p class="nav-base-name-hidden"><span>{{ user.nickname }}</span>님</p>
+        </a>
+        <form action="{% url 'accounts:logout' %}" method="POST" class="nav-logout-form">
+            {% csrf_token %}
+            <input type="submit" value="LOGOUT">
+        </form>
+      </div>
+      {% else %}
+      <div class="nav-main-none-user">
+        <a class="nav-user-login" href="{% url "accounts:login" %}">로그인</a>
+        <a class="nav-user-signup" href="{% url "accounts:signup" %}">회원가입</a>
+      </div>
+      {% endif %}
+    </div>
+  </nav>
+  <hr>
+ 
+  <main>
+    {% block content %}
+    {% endblock content %}
+  </main>
+  
+  <footer>
+    <div class="footer-container">
+      <p class="footer-text1">&copy; SSAFY 12 / 2024 My Website</p>
+      <p class="footer-text2">WARM</p>
+    </div>
+  </footer>
+  <script>
+    window.isUserLoggedIn = {% if request.user.is_authenticated %}true{% else %}false{% endif %};
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@3"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
+
+<!--다크모드 토글-->
+<div class="theme-toggle-container">
+  <button id="themeToggleButton" title="Toggle Dark Mode">🌙</button>
+</div>
+
+<!--스크롤 버튼-->
+<button id="scrollToTopButton" title="Go to top">▲</button>
+
+<script>
+  // 최상단으로 이동 버튼 관련 스크립트
+  document.addEventListener('DOMContentLoaded', function () {
+    const scrollToTopButton = document.getElementById('scrollToTopButton');
+
+    // 스크롤 이벤트에 따라 버튼 표시/숨김
+    window.onscroll = function () {
+      if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+        scrollToTopButton.style.display = "block";
+      } else {
+        scrollToTopButton.style.display = "none";
+      }
+    };
+
+    // 버튼 클릭 시 부드럽게 최상단으로 이동
+    scrollToTopButton.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // 반응형 햄버거 버튼 관련 코드
+  document.addEventListener('DOMContentLoaded', () => {
+    const menuToggle = document.querySelector('.menu-toggle')
+    const nav = document.querySelector('nav')
+    const isUserLoggedIn = window.isUserLoggedIn
+
+    if (!isUserLoggedIn) {
+      // 비로그인 상태에서는 햄버거 버튼 숨김
+      menuToggle.style.display = 'none';
+    } else {
+      // 로그인 상태에서는 햄버거 버튼 보임
+      menuToggle.style.display = 'block';
+    }
+
+    menuToggle.addEventListener('click', () => {
+      nav.classList.toggle('menu-open')
+    })
+  })
+  
+
+  // 다크모드 기능 구현
+  document.addEventListener('DOMContentLoaded', () => {
+    // 토글 버튼
+    const themeToggleButton = document.getElementById('themeToggleButton');
+    // base.css 선택
+    const themeLink = document.getElementById('theme-link');
+    // movies.css 선택
+    const moviesThemeLink = document.getElementById('movies-theme-link');
+    // articles.css 선택
+    const articlesThemeLink = document.getElementById('articles-theme-link');
+    // movies.css 선택
+    const accountsThemeLink = document.getElementById('accounts-theme-link');
+    // 햄버거 이미지 선택
+    const menuToggleImg = document.querySelector('.menu-toggle img'); 
+    // 좋아요 이미지 선택
+    const thumbImg = document.querySelector('.article-like-icon1')
+    // 댓글 이미지 선택
+    const commentImg = document.querySelector('.article-like-icon2')
+  
+    // 기존 테마 상태를 로컬 스토리지에서 가져오기
+    let currentTheme = localStorage.getItem('theme') || 'light';
+  
+    // 테마 변경 함수
+    function setTheme(theme) {
+      if (theme === 'dark') {
+        themeLink.href = "{% static 'css/base_dark.css' %}";
+        moviesThemeLink.href = "{% static 'css/movies_dark.css' %}";
+        articlesThemeLink.href = "{% static 'css/articles_dark.css' %}";
+        accountsThemeLink.href = "{% static 'css/accounts_dark.css' %}";
+        themeToggleButton.textContent = '☀️'; // 버튼 아이콘 변경
+        themeToggleButton.style.backgroundColor = '#ffffff';
+        menuToggleImg.src = "{% static 'img/light_menu.png' %}"; // 다크 테마용 이미지
+        
+        // 이미지가 존재하는 경우에만 src 변경
+        if (thumbImg) {
+          thumbImg.src = "{% static 'img/light_thumb.png' %}";
+        }
+        if (commentImg) {
+          commentImg.src = "{% static 'img/light_comment.png' %}";
+        }
+
+        localStorage.setItem('theme', 'dark'); // 테마 상태 저장
+      } else {
+        themeLink.href = "{% static 'css/base.css' %}";
+        moviesThemeLink.href = "{% static 'css/movies.css' %}";
+        articlesThemeLink.href = "{% static 'css/articles.css' %}";
+        accountsThemeLink.href = "{% static 'css/accounts.css' %}";
+        themeToggleButton.textContent = '🌙'; // 버튼 아이콘 변경
+        themeToggleButton.style.backgroundColor = '#252525';
+        menuToggleImg.src = "{% static 'img/menu.png' %}"; // 라이트 테마용 이미지
+        
+        // 이미지가 존재하는 경우에만 src 변경
+        if (thumbImg) {
+          thumbImg.src = "{% static 'img/thumb.png' %}";
+        }
+        if (commentImg) {
+          commentImg.src = "{% static 'img/comment.png' %}";
+        }
+        
+        localStorage.setItem('theme', 'light'); // 테마 상태 저장
+      }
+      currentTheme = theme; // 현재 테마 상태 업데이트
+    }
+  
+    // 초기 테마 설정
+    setTheme(currentTheme);
+  
+    // 버튼 클릭 이벤트
+    themeToggleButton.addEventListener('click', () => {
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      setTheme(newTheme);
+    });
+  });
+  
+
+</script>

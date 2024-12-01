@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container movie-detail-container">
+  <div class="row gx-5">
+    <div class="col">
+      <img class="detail-poster" src="https://image.tmdb.org/t/p/original{{ movie.poster_path }}" alt="{{ movie.title }}">
+    </div>
+    <div class="col movie-detail-text">
+      <div>
+        <h4 class="movie-detail-title">{{ movie.title }}</h4>
+      </div>
+      <hr>
+      <div class="row movie-detail-css">
+        <div class="col-4 movie-detail-check">
+          <p>개봉일</p>
+          <p>장르</p>
+          <p>태그</p>
+          <p>러닝타임</p>
+          <p>연령등급</p>
+        </div>
+        <div class="col-8">
+          <p>{{ movie.release_date }}</p>
+          <p>
+            {% for genre in genres %}
+              {{ genre }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+          </p>
+          <p>{{ movie.tags|default:"정보 없음" }}</p>
+          <p>{{ movie.runtime|default:"정보 없음" }}분</p>
+          <p>{{ movie.age_rating|default:"정보 없음" }}</p>
+        </div>
+      </div>
+      <hr>
+      <div class="row movie-detail-css">
+        <div class="col-4 movie-detail-check">
+          <p>줄거리</p>
+        </div>
+        <div class="col-8">
+          <p>{{ movie.overview }}</p>
+        </div>
+      </div>
+      <hr>
+      <div class="row movie-detail-css">
+        <div class="col-4 movie-detail-check">
+          <p>감독</p>
+          <p>출연</p>
+        </div>
+        <div class="col-8">
+          <p>{{ movie.director }}</p>
+          <p>
+            {% for actor in actors %}
+              {{ actor.name }} ({{ actor.character|default:"역할 정보 없음" }}){% if not forloop.last %},<br> {% endif %}
+            {% empty %}
+              출연진 정보가 없습니다.
+            {% endfor %}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="movie-detail-comment-box container">
+  <div>
+  <p class="comment-ment">{{ movie_comments|length }}개의 댓글이 있어요</p>
+  </div>
+  <div class="movie-comment-container">
+    <form action="{% url "movies:movie_comments_create" movie.pk %}" method="POST">
+      {% csrf_token %}
+      <div class="movie-comment-form ">
+        {{ movie_comment_form }}
+      <div class="movie-comment-form-btn">
+        <input type="submit" value="등록">
+      </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% for movie_comment in movie_comments %}
+<div class="movie-comment-delete container">
+  <div class="movie-comment-delete-text">
+    <p class="comment-name">{{ movie_comment.user.nickname }}</p>
+    <p>{{ movie_comment.content }}</p>
+  </div>
+  {% if request.user == movie_comment.user %}
+    <div class="movie-comment-delete-btn">
+      <form action="{% url "movies:movie_comments_delete" movie.pk movie_comment.pk %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="삭제">
+      </form>
+    </div>
+  {% endif %}
+</div>
+{% endfor %}
+
+<script>
+  
+</script>
+{% endblock content %}

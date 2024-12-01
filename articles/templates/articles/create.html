@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="container article-create-form">
+    <form action="{% url 'articles:create' %}" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button class="container article-create-form-btn" type="submit">작성하기</button>
+    </form>
+  </div>
+{% endblock content %}

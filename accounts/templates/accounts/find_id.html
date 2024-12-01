@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="signup-container">
+    <h2>아이디 찾기</h2>
+    <p class="find-id-p"><small>가입 시 사용하신 이름과 이메일을 입력해주세요.</small></p>
+    <form method='POST'>
+        {% csrf_token %}
+        <div class = "form-group">
+            <label for="name" class="name-email-label">이름</label><br>
+            <input type="text" id="name" name="name" required><br>
+
+            <label for="email" class="name-email-label">이메일</label><br>
+            <input type="email" id="email" name="email" required><br>
+            <div>
+                <button type="submit" class="signup-btn signup-btn-light">아이디 찾기</button>
+            </div>
+            {% if success_message %}
+                <p class="success-message find-p">{{ success_message }}</p>
+            {% endif %}
+            {% if error_message %}
+                <p class="error-message find-p">{{ error_message }}</p>
+            {% endif %}
+        </div>
+    </form>
+</div>
+{% endblock content %}

@@ -1,0 +1,407 @@
+/* 커뮤니티 전체글 조회 페이지 */
+.article-user-name {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.article-main-title {
+    margin-top: 60px;
+    margin-bottom: 40px;
+    font-size: 18px;
+}
+
+
+.article-list-menu > a {
+    text-decoration: none;
+    color: #FF21A6;
+    font-weight: 500;
+    margin-right: 20px;
+}
+
+.article-list-menu-all {
+    font-weight: 800;
+}
+
+.article-list-all {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.article-list-btn {
+    display: flex;
+    justify-content: flex-end;
+    width: 70px;
+    height: 26px;
+    background-color: #FF21A6;
+    border-radius: 4px; /* 버튼 모서리를 둥글게 */
+    padding: 2px 12px; /* 버튼 내부 여백 */
+    font-size: 16px;
+    font-weight: 400; /* 버튼 글꼴 두께 */
+    margin-right: 12px;
+}
+
+.article-list-btn > a {
+    text-decoration: none;
+    color: white; /* 텍스트 색상 */
+}
+
+.article-list-detail {
+    margin-top: 40px;
+}
+
+.article-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.article-list-detail-text {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.article-list-detail-text-text {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.article-list-like {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
+}
+
+.article-list-like > p {
+    margin-left: 5px;
+}
+
+.article-list-like > img {
+    margin-bottom: 15px;
+}
+
+.article-like-icon-text {
+    margin-right: 20px;
+}
+
+.article-list-author {
+    font-weight: 600;
+}
+
+.article-like-icon1,
+.article-like-icon2 {
+    width: 30px;
+}
+
+.article-detail-line {
+    border-bottom: 6px solid #f0f0f0;
+    margin-bottom: 30px;
+}
+
+
+
+/* 커뮤니티 디테일 페이지 - 상세글 조회 */
+
+.article-detail-img-none {
+    color: #ccc;
+}
+
+.article-detail-user {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.article-detail-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-top: 40px;
+}
+
+.article-detail-user-name {
+    font-weight: 600;
+}
+
+.article-detail-img > img {
+    max-width: 600px;
+}
+
+.article-detail-img {
+    text-align: center;
+    margin-top: 50px;
+}
+
+.article-detail-content {
+    margin-top: 50px;
+    margin-bottom: 50px;
+    font-size: 18px;
+}
+
+.article-detail-like {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.article-detail-like-btn {
+    color: white;
+    width: 70px;
+    height: 26px;
+    background-color: #FF21A6;
+    border-radius: 4px; /* 버튼 모서리를 둥글게 */
+    border: none; /* 버튼 테두리 제거 */
+    font-size: 16px;
+    font-weight: 500; /* 버튼 글꼴 두께 */
+    margin-right: 12px;
+}
+
+.article-detail-form {
+    display: flex; /* Flexbox로 가로 정렬 */
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    align-items: center; /* 세로 정렬 */
+    gap: 10px; /* 버튼 간격 */
+  }
+
+.article-detail-update-btn {
+    padding: 0;
+}
+
+.article-detail-update-btn input[type="submit"] {
+    color: white; /* 텍스트 색상 */
+    width: 70px;
+    height: 26px;
+    background-color: #000000; /* 버튼 배경색 */
+    border-radius: 4px; /* 버튼 모서리를 둥글게 */
+    border: none; /* 버튼 테두리 제거 */
+    padding: 2px 0px; /* 버튼 내부 여백 */
+    font-size: 14px;
+    font-weight: 500; /* 버튼 글꼴 두께 */
+}
+
+.article-detail-comment {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.article-detail-comment-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 10px;
+    align-items: center;
+}
+
+.article-detail-comment-form > textarea {
+    width: 500px; /* 최대 너비 */
+    height: 30px;
+    border-radius: 4px; /* 둥근 모서리 */
+    border: 1px solid #ccc; /* 테두리 */
+    padding: 2px; /* 내부 여백 */
+    font-size: 14px; /* 폰트 크기 */
+    box-sizing: border-box; /* 패딩 포함 너비 계산 */
+}
+
+.article-detail-comment-form > button {
+    color: white; /* 텍스트 색상 */
+    width: 90px;
+    height: 30px;
+    background-color: #FF21A6; /* 버튼 배경색 */
+    border-radius: 4px; /* 버튼 모서리를 둥글게 */
+    border: none; /* 버튼 테두리 제거 */
+    padding: 2px 12px; /* 버튼 내부 여백 */
+    font-size: 14px;
+    font-weight: 500; /* 버튼 글꼴 두께 */
+}
+
+/* 댓글 전체 컨테이너 중앙 정렬 */
+.article-detail-comment-container {
+    max-width: 600px; /* 댓글 섹션의 최대 너비 */
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 20px; /* 댓글 간의 간격 */
+}
+
+/* 댓글 리스트 스타일 */
+#comments-list {
+    list-style: none; /* li 기본 스타일 제거 */
+    padding: 0; /* 기본 패딩 제거 */
+    margin: 0; /* 기본 마진 제거 */
+}
+
+.article-detail-comment-item {
+    list-style: none; /* li 기본 스타일 제거 */
+    margin-bottom: 20px;
+}
+
+/* 댓글 상자 스타일 */
+/* 댓글 박스 중앙 정렬 */
+.article-detail-comment-box {
+    display: flex;
+    justify-content: space-between; /* 내용과 버튼 간의 공간 배분 */
+    align-items: flex-start; /* 수직 가운데 정렬 */
+    width: 100%; /* 부모 컨테이너에 맞춤 */
+    border-radius: 6px;
+    padding: 5px 0;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+
+/* 댓글 내용 및 생성 날짜 */
+.article-detail-comment-text {
+    flex: 1; /* 남는 공간 차지 */
+    word-wrap: break-word;
+    overflow-wrap: break-word; /* 긴 단어 줄바꿈 */
+    white-space: normal;
+}
+
+/* 댓글 삭제 버튼 */
+.article-detail-comment-delete {
+    background: #929292;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+/* 대댓글 작성 폼 */
+/* 대댓글 작성 폼 중앙 정렬 */
+.article-detail-reply-form {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start; /* 입력 필드와 버튼 사이 간격 유지 */
+    align-items: center; /* 수직 가운데 정렬 */
+    gap: 8px; /* 필드와 버튼 사이 간격 */
+    margin-top: 5px;
+    max-width: 500px; /* 대댓글 폼 너비 제한 */
+    
+}
+
+.article-detail-reply-form textarea {
+    flex: 1; /* 입력 필드가 가로로 확장 */
+    max-width: 300px; /* 최대 너비를 제한 */
+    height: 24px; /* 높이를 줄임 */
+    border-radius: 4px; /* 둥근 모서리 */
+    border: 1px solid #ccc; /* 테두리 색상 */
+    padding: 2px 6px; /* 내부 여백 */
+    font-size: 12px; /* 작은 폰트 크기 */
+    resize: none; /* 크기 조정 비활성화 */
+    box-sizing: border-box; /* 패딩 포함 크기 계산 */
+}
+
+/* 대댓글 작성 버튼 */
+.article-detail-reply-form button {
+    width: 80px; /* 버튼 크기를 작게 설정 */
+    height: 24px; /* 버튼 높이를 댓글 입력 버튼보다 작게 설정 */
+    color: white;
+    background-color: #000000;
+    border-radius: 4px;
+    border: none;
+    font-size: 12px; /* 작은 폰트 크기 */
+    font-weight: 500;
+    cursor: pointer;
+    padding: 2px 6px; /* 내부 여백 */
+}
+
+/* 대댓글 목록 중앙 정렬 */
+.article-detail-replies-list {
+    max-width: 390px; /* 대댓글 목록 최대 너비 */
+    padding-left: 0; /* 기본 목록 스타일 제거 */
+    border-left: 2px solid #ddd; /* 대댓글 구분선 */
+    padding-left: 10px; /* 구분선과의 간격 */
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+.article-detail-reply-item {
+    list-style: none; /* 기본 li 스타일 제거 */
+    margin-bottom: 10px; /* 대댓글 간격 */
+}
+
+/* 대댓글 아이템 스타일 */
+.article-detail-reply-box {
+    display: flex; /* Flexbox로 가로 정렬 */
+    justify-content: space-between; /* 요소 간의 공간 배분 */
+    align-items: flex-start; /* 버튼이 텍스트와 동일한 라인에 유지 */
+    box-sizing: border-box;
+    width: 100%; /* 박스 크기 고정 */
+    border-radius: 6px; /* 둥근 모서리 */
+    padding: 6px 0px; /* 내부 여백 */
+    font-size: 12px; /* 작은 글씨 */
+    box-sizing: border-box; /* 패딩 포함 크기 계산 */
+    height: 24px;
+}
+
+/* 대댓글 텍스트 스타일 */
+.article-detail-reply-text {
+    flex: 1; /* 텍스트가 남는 공간을 차지 */
+    word-wrap: break-word; /* 줄바꿈 허용 */
+    overflow-wrap: break-word; /* 긴 단어 줄바꿈 */
+    white-space: normal; /* 텍스트 줄바꿈 */
+}
+
+/* 대댓글 삭제 버튼 */
+.article-detail-reply-delete {
+    background: #929292;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 2px 6px;
+    font-size: 10px; /* 작은 버튼 크기 */
+    cursor: pointer;
+    flex-shrink: 0; /* 버튼 크기를 고정 */
+    margin-left: 10px; /* 텍스트와 간격 확보 */
+    align-self: flex-start; /* 버튼의 수직 정렬 고정 */
+}
+
+.article-detail-reply-name {
+    font-weight: 600;
+    margin-right: 20px;
+}
+
+.article-detail-comment-name {
+    font-weight: 600;
+    margin-right: 20px;
+}
+
+/* 커뮤니티 게시글 작성 폼 */
+.article-create-form-btn {
+    color: white; /* 텍스트 색상 */
+    width: 90px;
+    height: 34px;
+    background-color: #FF21A6; /* 버튼 배경색 */
+    border-radius: 4px; /* 버튼 모서리를 둥글게 */
+    border: none; /* 버튼 테두리 제거 */
+    padding: 2px 12px; /* 버튼 내부 여백 */
+    font-size: 14px;
+    font-weight: 500; /* 버튼 글꼴 두께 */
+}
+
+.article-update-form-btn {
+    color: white; /* 텍스트 색상 */
+    width: 90px;
+    height: 34px;
+    background-color: #FF21A6; /* 버튼 배경색 */
+    border-radius: 4px; /* 버튼 모서리를 둥글게 */
+    border: none; /* 버튼 테두리 제거 */
+    padding: 2px 12px; /* 버튼 내부 여백 */
+    font-size: 14px;
+    font-weight: 500; /* 버튼 글꼴 두께 */
+}
+
+/* 모달 폼 버튼 색 */
+#confirmDeleteButton {
+    background-color: #FF21A6;
+    border: none;
+}

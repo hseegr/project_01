@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="article-main-container container">
+  {% if request.user.is_authenticated %}
+    <div class="row article-main-title">
+      <p><span class="article-user-name">{{ user.nickname }}</span>님, <b>WARM</b>의 다른 사용자들과 이야기를 나누어 보세요! 🍀</p>
+    </div>
+  {% else %}
+    <div class="row article-main-title">
+      <p><b>로그인이 필요해요!</b> 💦</p>
+    </div>
+  {% endif %}
+  <div class="row article-list-all">
+    <div class="col-10 article-list-menu">
+      <a href="{% url 'articles:main_page' %}">전체</a>
+      <a href="#">|</a>
+      <a href="{% url 'articles:category_list' 'MOVIE' %}">영화</a>
+      <a href="#">|</a>
+      <a href="{% url 'articles:category_list' 'TICKET' %}">티켓</a>
+      <a href="#">|</a>
+      <a href="{% url 'articles:category_list' 'CHAT' %}">잡담</a>
+    </div>
+    <div class="col-2 article-list-btn">
+      <a href="{% url 'articles:create' %}">글쓰기</a>
+    </div>
+  </div>
+
+  <div class="article-detail-line"></div>
+  
+  {% for article in articles %}
+  <div class="row article-list-detail">
+    <div>
+      <div class="row">
+        <div class="col-6">
+          <p class="article-title" data-id="{{ article.id }}">{{ article.title }}</p>
+        </div>
+        <div class="col-6 article-list-like">
+          <img class="article-like-icon1" src="{% static "img/thumb.png" %}" alt="thumb">
+          <p class="article-like-icon-text">{{ article.likes.count }}</p>
+          <img class="article-like-icon2" src="{% static "img/comment.png" %}" alt="comment">
+          <p>{{ article.comments.count }}</p>
+        </div>
+      </div>
+      <div class="article-list-detail-text">
+        <div class="article-list-detail-text-text">
+          <p class="article-list-author">{{ article.author }}</p>
+          <p>작성일 : {{ article.created_at|date:"Y-m-d H:i" }}</p>
+        </div>
+        <div>
+          <p>조회수 : {{ article.views }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+  {% empty %}
+    <p>아직 작성된 글이 없습니다</p>
+  {% endfor %}
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const titles = document.querySelectorAll('.article-title');
+      titles.forEach(title => {
+        title.addEventListener('click', function() {
+          const articleId = this.getAttribute('data-id');
+          window.location.href = `http://127.0.0.1:8000/articles/${articleId}/articles_detail/`;
+        });
+        title.style.cursor = 'pointer';
+    });
+  });
+</script>
+{% endblock content %}

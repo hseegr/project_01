@@ -1,0 +1,23 @@
+{% comment %} {% extends "base.html" %}
+
+{% block content %}
+
+<h1>커뮤니티 페이지</h1>
+<a href="{% url 'articles:create' %}">글쓰기</a>
+<hr>
+{% for article in articles %}
+    <h3 class="clickable-text" data-article-id="{{ article.pk }}" style="cursor: pointer;">{{ article.title }}</h3>
+    <p>조회수: {{ article.views }}</p>
+    <hr>
+{% endfor %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.clickable-text').on('click', function() {
+            const articleId = $(this).data('article-id');
+            window.location.href = `/articles/${articleId}/articles_detail`;  // 세부정보 페이지로 이동
+        });
+    });
+</script>
+
+{% endblock content %} {% endcomment %}

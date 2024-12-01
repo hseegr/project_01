@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+  <!--모달-->
+  <div class="modal fade" id="alertModal" tabindex="-1" aria-labelledby="alertModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="alertModalLabel">알림</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- 여기에 JavaScript로 메시지가 동적으로 들어갑니다 -->
+          <p id="alertModalMessage"></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">확인</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="preference-form-container">
+    <div>
+      <h2>나만의 <strong style="color:#f439b5">취향</strong>을 <strong style="color:#f439b5">선택</strong>하고, 만들어요!</h2>
+      <hr>
+    </div>
+    <form method="post" id="preference-form">
+      {% csrf_token %}
+      <div class="preference-section">
+        <h3>장르 (최대 3개)</h3>
+        <div class="checkbox-group" id="genresSection">
+          {{ form.favorite_genres }}
+        </div>
+      </div>
+      <hr class="preference-hr">
+      <button type="submit" class="submit-btn signup-btn-pink">저장하기</button>
+    </form>
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sections = ['genres'];
+      const form = document.getElementById('preference-form');
+      const submitButton = form.querySelector('button[type="submit"]');
+    
+      // 모달 요소와 메시지
+      const alertModal = new bootstrap.Modal(document.getElementById('alertModal'));
+      const alertModalMessage = document.getElementById('alertModalMessage');
+    
+      // '저장하기' 버튼 클릭 시 이벤트
+      submitButton.addEventListener('click', function (event) {
+        const checkedCount = document.querySelectorAll('#genresSection input[type="checkbox"]:checked').length;
+    
+        // 최소 1개 이상의 장르가 선택되어야 함
+        if (checkedCount === 0) {
+          event.preventDefault(); // 폼 제출을 막음
+          alertModalMessage.textContent = '최소 1개 이상의 장르를 선택해야 합니다.';
+          alertModal.show(); // 모달 표시
+          return false; // 더 이상 진행되지 않도록 함
+        }
+      });
+    
+      sections.forEach(section => {
+        const checkboxes = document.querySelectorAll(`#${section}Section input[type="checkbox"]`);
+        checkboxes.forEach(checkbox => {
+          checkbox.addEventListener('change', function () {
+            const checked = document.querySelectorAll(`#${section}Section input[type="checkbox"]:checked`);
+            if (checked.length > 3) {
+              this.checked = false; // 현재 체크를 해제
+              alertModalMessage.textContent = `${section.charAt(0).toUpperCase() + section.slice(1)}는 최대 3개까지만 선택할 수 있습니다.`;
+              alertModal.show(); // 모달 표시
+            }
+          });
+        });
+      });
+    });
+    
+
+    // 원래 코드
+    {% comment %} document.addEventListener('DOMContentLoaded', function() {
+      const sections = ['genres'];
+      const form = document.getElementById('preference-form');
+      const checkboxes = document.querySelectorAll('#genresSection input[type="checkbox"]');
+      const submitButton = form.querySelector('button[type="submit"]');
+      
+
+      // '저장하기' 버튼 클릭 시 이벤트
+      submitButton.addEventListener('click', function(event) {
+        const checkedCount = document.querySelectorAll('#genresSection input[type="checkbox"]:checked').length;
+
+        // 최소 1개 이상의 장르가 선택되어야 함
+        if (checkedCount === 0) {
+          event.preventDefault();  // 폼 제출을 막음
+          alert('최소 1개 이상의 장르를 선택해야 합니다.');  // 경고 메시지
+          return false;  // 더 이상 진행되지 않도록 함
+        }
+      });
+      sections.forEach(section => {
+        const checkboxes = document.querySelectorAll(`#${section}Section input[type="checkbox"]`);
+        checkboxes.forEach(checkbox => {
+          checkbox.addEventListener('change', function() {
+            const checked = document.querySelectorAll(`#${section}Section input[type="checkbox"]:checked`);
+            if (checked.length > 3) {
+              this.checked = false; // 현재 체크를 해제
+              alert(`${section.charAt(0).toUpperCase() + section.slice(1)}는 최대 3개까지만 선택할 수 있습니다.`);
+            }
+          });
+        });
+      });
+    }); {% endcomment %}
+  </script>
+{% endblock content %}

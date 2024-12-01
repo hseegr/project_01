@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="article-update-form container">
+  <form action="{% url "articles:articles_update" article.pk %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class="article-update-form-btn" type="submit" value="수정하기">
+  </form>
+</div>
+<!-- <a href="{% url 'articles:articles_detail' article.pk %}">[back]</a>-->
+
+{% endblock content %}

@@ -1,0 +1,256 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<!-- 모달! -->
+<div class="modal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">WARM</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>로그인이 필요한 페이지예요.</p>
+      </div>
+      <div class="modal-footer">
+        <a href="{% url 'accounts:login' %}">
+          <button class="modal-btn" type="button" class="btn btn-primary">로그인</button>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container movie-list-search-form">
+  <div class="genre-filter">
+    <label for="genre-select">장르를 선택하세요! </label>
+    <select id="genre-select">
+      <option value="all">전체</option>
+      {% for genre in genres %}
+      <option value="{{ genre.id }}">{{ genre.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <form action="{% url 'movies:movie_list' %}" method="GET">
+    <input type="text" name="searched_movies" value="{{ searched_movies }}" placeholder="원하는 영화를 검색해요!">
+    <button>검색</button>
+  </form>
+</div>
+
+<div class="movie-list-container container">
+  <div id="movies" class="movies-container">
+    {% for movie in movies %}
+    <div class="movie" data-genre-ids="{% for genre in movie.genres.all %}{{ genre.id }}{% if not forloop.last %},{% endif %}{% endfor %}">
+      <div class='poster-with-heart'>
+        <img class='heart-icon'
+             src="{% static 'img/heart-none.png' %}"
+             alt="icon"
+             data-movie-id="{{ movie.id }}"
+             {% if movie.id in liked_movie_ids %}
+             data-is-liked="true"
+             {% endif %}>
+        <div class="poster-overlay"></div>
+        <a href="{% url 'movies:movie_detail' movie.id %}">
+          <img class="movie-poster" src="https://image.tmdb.org/t/p/w300{{ movie.poster_path }}" alt="{{ movie.title }}">
+        </a>
+      </div>
+      <h4 class="movie-title">{{ movie.title }}</h4>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<style>
+  /* 하트 아이콘 애니메이션 */
+  .heart-icon {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+  
+  .heart-icon.bounce {
+    animation: bounce 0.5s ease-in-out;
+  }
+  
+  @keyframes bounce {
+    0% { transform: scale(1); }
+    30% { transform: scale(1.2); }
+    50% { transform: scale(1); }
+    70% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+  }
+  
+  /* 미니 하트 애니메이션 */
+  .mini-heart {
+    position: absolute;
+    width: 12px;  /* 크기 조정 */
+    height: 12px;  /* 크기 조정 */
+    animation: float-up 1.5s ease-in-out forwards; /* 지속시간 1.5초 */
+    opacity: 0.8;
+  }
+  
+  @keyframes float-up {
+    0% { 
+      transform: translate(0, 0) scale(1); 
+      opacity: 1; 
+    }
+    80% { 
+      opacity: 0.8; 
+    }
+    100% { 
+      transform: translate(calc(var(--x) * 50px), calc(var(--y) * 100px)) scale(0.8); /* 미니 하트의 크기 변화 */
+      opacity: 0; 
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const moviesContainer = document.getElementById('movies');
+    const genreSelect = document.getElementById('genre-select');
+    const allMovies = Array.from(moviesContainer.children);
+    
+    function createMiniHeart() {
+      const miniHeart = document.createElement('img');
+      miniHeart.classList.add('mini-heart');
+      miniHeart.src = "{% static 'img/heart-fill.png' %}";
+      
+      const randomX = (Math.random() - 0.5) * 2;
+      const randomY = -(Math.random() * 0.5 + 0.5);
+      
+      miniHeart.style.setProperty('--x', randomX.toString());
+      miniHeart.style.setProperty('--y', randomY.toString());
+      miniHeart.style.width = '16px';
+      miniHeart.style.height = '16px';
+      miniHeart.style.opacity = (Math.random() * 0.5 + 0.5).toString();
+      
+      return miniHeart;
+    }
+  
+    function animateMovies(movies) {
+      movies.forEach(movie => {
+        movie.style.opacity = '0';
+        movie.style.transform = 'translateY(30px)';
+        movie.style.display = 'block';
+      });
+    
+      setTimeout(() => {
+        movies.forEach((movie, index) => {
+          movie.style.transition = 'opacity 0.6s, transform 0.6s';
+          movie.style.transitionDelay = `${index * 0.15}s`;
+          movie.style.opacity = '1';
+          movie.style.transform = 'translateY(0)';
+        });
+      }, 50);
+    }
+  
+    animateMovies(allMovies);
+  
+    function filterMovies(selectedGenre) {
+      allMovies.forEach(movie => {
+        movie.style.opacity = '0';
+        movie.style.transform = 'translateY(30px)';
+        movie.style.transition = '';
+        setTimeout(() => {
+          movie.style.display = 'none';
+        }, 200);
+      });
+  
+      const visibleMovies = [];
+  
+      allMovies.forEach(movie => {
+        const movieGenres = movie.dataset.genreIds.split(',');
+        if (selectedGenre === 'all' || movieGenres.includes(selectedGenre)) {
+          visibleMovies.push(movie);
+        }
+      });
+  
+      setTimeout(() => {
+        visibleMovies.forEach(movie => {
+          movie.style.display = 'block';
+        });
+  
+        setTimeout(() => {
+          animateMovies(visibleMovies);
+        }, 50);
+      }, 300);
+    }
+  
+    genreSelect.addEventListener('change', function () {
+      const selectedGenre = genreSelect.value;
+      filterMovies(selectedGenre);
+    });
+  
+    const heartIcons = document.querySelectorAll('.heart-icon');
+  
+    heartIcons.forEach(icon => {
+      if (icon.dataset.isLiked === "true") {
+        icon.src = "{% static 'img/heart-fill.png' %}";
+      }
+    });
+  
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+  
+    moviesContainer.addEventListener('click', function (event) {
+      const heartIcon = event.target.closest('.heart-icon');
+      
+      if (!heartIcon) return;
+  
+      event.preventDefault();
+  
+      const myModal = new bootstrap.Modal(document.querySelector('.modal'));
+      
+      if (!isUserLoggedIn) {
+        myModal.show();
+        return;
+      }
+  
+      const movieId = heartIcon.dataset.movieId;
+  
+      // 하트 상태에 따라 미니 하트 생성 여부 결정
+      const isCurrentlyLiked = heartIcon.dataset.isLiked === "true";
+  
+      // 하트가 켜졌을 때만 미니 하트 애니메이션 생성
+      if (!isCurrentlyLiked) {
+        heartIcon.classList.add('bounce');
+  
+        heartIcon.addEventListener('animationend', function () {
+          heartIcon.classList.remove('bounce');
+        });
+
+        const rect = heartIcon.getBoundingClientRect();
+        const numHearts = Math.floor(Math.random() * 3) + 20;
+  
+        for (let i = 0; i < numHearts; i++) {
+          const miniHeart = createMiniHeart();
+          miniHeart.style.position = 'fixed';
+          miniHeart.style.left = `${rect.left + rect.width / 2}px`;
+          miniHeart.style.top = `${rect.top + rect.height / 2}px`;
+          document.body.appendChild(miniHeart);
+
+          miniHeart.addEventListener('animationend', () => {
+            document.body.removeChild(miniHeart);
+          });
+        }
+      }
+  
+      // 하트 상태를 변경
+      axios({
+        method: 'post',
+        url: `/movies/${movieId}/likes/`,
+        headers: { 'X-CSRFToken': csrftoken },
+      })
+        .then((response) => {
+          const isLiked = response.data.is_liked;
+          heartIcon.src = isLiked
+            ? "{% static 'img/heart-fill.png' %}"
+            : "{% static 'img/heart-none.png' %}";
+          heartIcon.dataset.isLiked = isLiked.toString();
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
+  });
+</script>
+{% endblock content %}

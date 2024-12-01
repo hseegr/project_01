@@ -1,0 +1,399 @@
+.login-form-container {
+    max-width: 400px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 가로축 중앙 정렬 */
+    justify-content: center; /* 세로축 중앙 정렬 */
+    height: 75vh; 
+    margin: 0 auto;
+    color: #ffffff;
+}
+
+.form-container {
+    max-width: 400px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 가로축 중앙 정렬 */
+    justify-content: center; /* 세로축 중앙 정렬 */
+    height: 75vh; 
+    margin: 0 auto;
+}
+
+.form-container h2 {
+    color: #ffffff;
+}
+
+.input-container {
+    width: 100%;
+}
+
+.input-container input {
+    width: 320px; 
+    height : 36px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.button-container {
+    width: 320px;
+    display: flex;
+    justify-content: center; /* 가로축 중앙 정렬 */
+    align-items: center; /* 세로축 중앙 정렬 */
+    height: auto; /* 부모 요소 높이 자동 */
+    margin: auto; /* 버튼과 이전 요소 간의 간격을 줄임 */
+}
+
+.btn.btn-dark {
+  background-color: #f439b5;
+}
+
+.form-group {
+    margin-bottom: 5px; /* 라벨과 입력 필드 간의 간격을 줄임 */
+    color: #ffffff;
+}
+
+.login-label {
+    display: block; /* 라벨을 블록 요소로 만들어 줄바꿈 */
+    height: 2px; /* 라벨의 높이를 36px로 설정 */
+    line-height: 20px; /* 텍스트를 수직으로 중앙 정렬 */
+    font-size: 10px; /* 라벨 글자 크기 */
+    margin-bottom: 0px; /* 라벨과 입력 필드 간의 간격을 더 줄임 */
+}
+
+.input-container input {
+    margin-top: 0;
+}
+
+.btn {
+    width: 100%;
+    height: 36px;
+    padding: 0;
+    margin-top: 15px; /* 버튼과 입력 필드 간의 간격을 줄임 */
+    display: flex;
+    justify-content: center; /* 버튼 텍스트 가로축 중앙 정렬 */
+    align-items: center; /* 버튼 텍스트 세로축 중앙 정렬 */
+    font-size: 16px;
+}
+
+.login-btn-light {
+    width: 320px;
+    height: 36px;
+    border: 1px solid rgb(110, 103, 103);
+    background-color: white;
+    color: black;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+.btn-light:hover {
+    background-color: #f0f0f0; /* 마우스 오버 시 배경색 변경 (선택 사항) */
+}
+
+.signup-container {
+    max-width: 400px;
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 가로축 중앙 정렬 */
+    justify-content: center; /* 세로축 중앙 정렬 */
+    min-height: 75vh;
+    padding: 20px 0;
+    color: #ffffff;
+}
+
+.form-group {
+    width: 100%;
+    margin-bottom: 5px; /* 각 필드 간의 간격을 조금 추가 */
+}
+
+.signup-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.signup-container .form-group input {
+    width: 320px; /* 버튼과 동일한 너비로 설정 */
+    height: 36px; /* 버튼과 동일한 높이로 설정 */
+    padding: 0 10px; /* 텍스트가 입력 필드 안에서 너무 붙지 않도록 여백 추가 */
+    /* 이거 왜 주석처리 한 거지??! 이거 적용해야 로그인 폼이랑 같은 형태! */
+    border: 1px solid rgb(110, 103, 103);
+    border-radius: 5px;
+}
+
+.error p {
+    color: red;
+    margin: 5px 0;
+}
+
+.signup-btn-light {
+    width: 100%; /* 버튼과 동일한 너비 */
+    height: 36px; /* 버튼과 동일한 높이 */
+    border: none;
+    background-color: #f439b5;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    text-align: center;
+    padding: 0; /* 여백 제거, padding이 있어도 중앙 정렬에 방해되지 않도록 */
+    margin-top: 20px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center; /* 버튼을 가로로 중앙 정렬 */
+    align-items: center; /* 버튼을 세로로 중앙 정렬 */
+    width: 100%;
+    margin-top: 20px; /* 버튼과 입력 필드 간의 간격 */
+}
+
+.preference-form-container {
+    max-width: 500px;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 가로축 중앙 정렬 */
+    justify-content: center; /* 세로축 중앙 정렬 */
+    height: 75vh;
+    margin: 0 auto;
+    color: #ffffff;
+}
+
+.submit-btn {
+    background-color: #f439b5; /* 핑크색 */
+    border: 1px solid #f439b5;
+    width: 420px; /* 버튼과 동일한 너비 */
+    height: 36px; /* 버튼과 동일한 높이 */
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
+    text-align: center;
+    padding: 0; /* 여백 제거, padding이 있어도 중앙 정렬에 방해되지 않도록 */
+}
+.preference-hr {
+    color: rgb(38, 31, 31);
+}
+
+.preference-button {
+    width: 100%;
+}
+
+.update-btn {
+    display: flex;
+    justify-content: center; /* 버튼을 가로로 중앙 정렬 */
+    align-items: center; /* 버튼을 세로로 중앙 정렬 */
+    background-color: #f439b5;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    width: 100%;
+    height: 36px;
+    margin-top: 20px; /* 버튼과 입력 필드 간의 간격 */
+}
+
+.change-p {
+    width:100%;
+}
+
+.password-change-input {
+    width: 320px;
+    height: 36px;
+    border: 1px solid rgb(110, 103, 103);
+    border-radius: 5px;
+    padding: 0 10px; /* 텍스트와 테두리 사이에 약간의 여백 추가 */
+    box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
+}
+
+.form-group .errorlist {
+    color: red;
+    list-style: none;
+    padding: 0;
+    margin: 5px 0;
+}
+
+.change-btn-light {
+    width: 320px;
+    height: 36px;
+    border: 1px solid rgb(110, 103, 103);
+    background-color: #f439b5;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center; /* 텍스트 중앙 정렬 */
+    border: none;
+    margin-top: 20px; /* 버튼과 입력 필드 간의 간격 */
+}
+
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 6열로 나눔 */
+    gap: 10px; /* 항목 간의 간격 */
+}
+
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    font-size: 14px; /* 텍스트 크기 */
+    justify-content: flex-start;
+    margin-bottom: 0px;
+}
+
+.checkbox-grid-check {
+    margin-top: 20px;
+}
+
+
+/* 선호 장르 체크 박스 커스텀 */
+.checkbox-item input[type="checkbox"] {
+    appearance: none; /* 기본 브라우저 스타일 제거 */
+    -webkit-appearance: none; /* 웹킷 기반 브라우저에서 기본 스타일 제거 */
+    -moz-appearance: none; /* 모질라 기반 브라우저에서 기본 스타일 제거 */
+    width: 16px; /* 체크박스 크기 */
+    height: 16px;
+    background-color: #f0f0f0; /* 기본 배경색 */
+    border:1px solid gray; /* 테두리 색상 */
+    border-radius: 2px; /* 둥근 모서리 */
+    cursor: pointer;
+    line-height: 15px;
+}
+
+.checkbox-item input[type="checkbox"]:checked {
+    background-color: #f439b5; /* 체크되었을 때 배경색 */
+    border: 1px solid #f439b5; /* 테두리 색상 */
+}
+
+.checkbox-item input[type="checkbox"]:checked::after {
+    content: '✓'; /* 체크 표시 */
+    display: block;
+    color: white; /* 체크 표시 색상 */
+    font-size: 12px;
+    text-align: center;
+    line-height: 15px;
+    padding-bottom: 4px;
+}
+
+
+/* 마이페이지 */
+.mypage-cate {
+    margin-top: 60px;
+}
+
+.mypage-cate-line {
+    border-left: #ccc solid 2px;
+}
+
+.mypage-cate-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #ffffff;
+}
+
+.mypage-cate-detail a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.find-id-btn {
+    background-color: #f439b5;
+    color: white;
+    border : 1px solid #f439b5;
+    border-radius: 5px;
+}
+
+.find-p {
+    font-size: 20px;
+    text-align: center;
+    margin : 10px;
+}
+
+.login-password-reset {
+    margin-bottom: -20px;
+}
+
+.login-link {
+    margin-left: 10px;
+    color: rgb(255, 255, 255); /* 검은색 글씨 */
+    font-size: 0.9rem;
+    cursor: pointer; /* 클릭 가능 표시 */
+    text-decoration: none;
+    margin-bottom: -30px;
+}
+
+.login-links {
+    display: flex;
+    justify-content: flex-end;
+    margin: 10px 0;
+}
+
+.name-email-label {
+    margin:5px
+}
+
+.find-id-p {
+    margin-bottom: 5px;
+}
+
+.btn.btn-secondary {
+    background-color: #f439b5;
+    border: none;
+}
+
+/* 체크박스 기본 스타일 제거 */
+.checkbox-group input[type="checkbox"] {
+  appearance: none; /* 기본 스타일 제거 */
+  -webkit-appearance: none; /* 웹킷 브라우저 대응 */
+  -moz-appearance: none; /* 파이어폭스 대응 */
+  width: 16px;
+  height: 16px;
+  border: 1px solid gray; /* 경계선 색상 */
+  border-radius: 2px; /* 약간 둥근 모서리 */
+  background-color: #f0f0f0; /* 배경색 */
+  cursor: pointer;
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+  outline: none;
+  transition: all 0.2s ease; /* 부드러운 전환 효과 */
+  line-height: 15px;
+}
+
+/* 체크박스에 마우스를 올렸을 때 */
+.checkbox-group input[type="checkbox"]:hover {
+  border-color: #ff66c4; /* 경계선 색상 변경 */
+  background-color: #fff; /* 배경색 유지 */
+}
+
+/* 체크박스가 선택된 상태 */
+.checkbox-group input[type="checkbox"]:checked {
+  background-color: #f439b5; /* 선택된 배경색 */
+  border-color: #f439b5; /* 경계선과 동일한 색상 */
+  color: #fff;
+}
+
+/* 선택된 상태의 체크 표시 */
+.checkbox-group input[type="checkbox"]:checked::before {
+  content: '✓'; /* 체크 표시 */
+  display: block;
+  color: #fff; /* 체크 표시 색상 */
+  font-size: 14px; /* 체크 표시 크기 */
+  text-align: center;
+  line-height: 15px;
+}
+
+.preference-section {
+  color: #ffffff;
+}
+
+.preference-hr {
+  color: #ffffff;
+}

@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+  <div class="weather-user-title">
+    <p><span>{{ user.nickname }}</span>님, 오늘 날씨에 어울리는 영화를 추천해 드릴게요! 🎨</p>
+  </div>
+  <div class="weather-content-box row">
+    <div class="offset-2 col-4">
+      <div>
+        <p>지금 계신 도시명을 입력해 주세요!</p>
+      </div>
+      <div>
+        <p class="weather-user-city">도시명을 입력해주세요</p>
+        <p class="weather-user-city">예시: 서울, 부산, 대구, 광주</p>
+      </div>
+    </div>
+    <div class="col-6">
+      <form class="weather-uer-form" method="POST">
+        {% csrf_token %}
+        <div>
+          {{ form.as_p }}
+        </div>
+        <div>
+          <button class="weather-user-form-btn" type="submit">날씨 확인</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+  <!--
+  {% if weather_condition %}
+      <h2>{{ city }}의 날씨</h2>
+      <p><strong>상태:</strong> {{ weather_condition }} ({{ description }})</p>
+      <p><strong>온도:</strong> {{ temperature }}°C</p>
+      <p><strong>습도:</strong> {{ humidity }}%</p>
+  {% elif error %}
+      <p style="color: red;">{{ error }}</p>
+  {% endif %}
+  -->
+</div>
+{% endblock content %}

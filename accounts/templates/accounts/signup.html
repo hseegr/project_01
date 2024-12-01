@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="signup-container">
+    <h1>Sign Up</h1>
+    <form method="POST" id="signup-form">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <signup-label for="{{ form.username.id_for_label }}">아이디</signup-label><br>
+            {{ form.username }}
+            {% comment %} {% if form.username.errors %}
+                <div class="error" id="username-error">
+                    {% for error in form.username.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %} {% endcomment %}
+        </div>
+
+        <div class="form-group">
+            <signup-label for="{{ form.password1.id_for_label }}">비밀번호</signup-label><br>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+                <div class="error" id="password1-error">
+                    {% for error in form.password1.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <signup-label for="{{ form.password2.id_for_label }}">비밀번호 확인</signup-label><br>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+                <div class="error" id="password2-error">
+                    {% for error in form.password2.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <signup-label for="{{ form.name.id_for_label }}">이름</signup-label><br>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <div class="error" id="name-error">
+                    {% for error in form.name.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            <signup-label for="{{ form.nickname.id_for_label }}">닉네임</signup-label><br>
+            {{ form.nickname }}
+            {% if form.nickname.errors %}
+                <div class="error" id="nickname-error">
+                    {% for error in form.nickname.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <signup-label for="{{ form.email.id_for_label }}">이메일</signup-label><br>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div class="error" id="email-error">
+                    {% for error in form.email.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <signup-label for="{{ form.birth_date.id_for_label }}">생년월일</signup-label><br>
+            {{ form.birth_date }}
+            {% if form.birth_date.errors %}
+                <div class="error" id="birth_date-error">
+                    {% for error in form.birth_date.errors %}
+                        <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
+
+        <input type="submit" value="회원가입" class="signup-btn signup-btn-light">
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const formFields = document.querySelectorAll('input, select, textarea');
+    
+    formFields.forEach(field => {
+        // 필드에 입력이 있을 때 오류 메시지 숨기기
+        field.addEventListener('input', function () {
+            const errorDiv = document.getElementById(`${field.id}-error`);
+            if (field.checkValidity()) {
+                // 유효하면 오류 메시지 숨기기
+                if (errorDiv) errorDiv.style.display = 'none';
+            } else {
+                // 유효하지 않으면 오류 메시지 보이기
+                if (errorDiv) errorDiv.style.display = 'block';
+            }
+        });
+    });
+
+    // 폼 제출 시 오류 처리
+    const form = document.getElementById('signup-form');
+    form.addEventListener('submit', function (event) {
+        const formElements = form.elements;
+        for (let i = 0; i < formElements.length; i++) {
+            const errorDiv = document.getElementById(`${formElements[i].id}-error`);
+            if (formElements[i].checkValidity() && errorDiv) {
+                errorDiv.style.display = 'none';
+            } else if (!formElements[i].checkValidity() && errorDiv) {
+                errorDiv.style.display = 'block';
+            }
+        }
+    });
+});
+</script>
+
+{% endblock %}
